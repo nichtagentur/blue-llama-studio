@@ -2,7 +2,7 @@ const BASE_URL = "https://generativelanguage.googleapis.com/v1beta";
 
 export async function startGeneration(prompt: string, aspectRatio = "16:9") {
   const res = await fetch(
-    `${BASE_URL}/models/veo-3.1-generate-preview:predictLongRunning`,
+    `${BASE_URL}/models/veo-3.1-fast-generate-preview:predictLongRunning`,
     {
       method: "POST",
       headers: {

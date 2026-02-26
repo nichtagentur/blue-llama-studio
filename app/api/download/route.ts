@@ -9,12 +9,21 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Veo returns URIs that may need the API key to access
     const fetchUrl = uri.includes("?")
       ? `${uri}&key=${process.env.GEMINI_API_KEY}`
       : `${uri}?key=${process.env.GEMINI_API_KEY}`;
 
-    const res = await fetch(fetchUrl);
+    // First request may return a redirect - follow it manually
+    let res = await fetch(fetchUrl, { redirect: "follow" });
+
+    // If we get a small JSON error response, try the /download/ path variant
+    if (!res.ok || res.headers.get("content-type")?.includes("json")) {
+      const downloadUrl = fetchUrl.replace(
+        "/v1beta/files/",
+        "/download/v1beta/files/"
+      );
+      res = await fetch(downloadUrl, { redirect: "follow" });
+    }
 
     if (!res.ok) {
       return NextResponse.json(

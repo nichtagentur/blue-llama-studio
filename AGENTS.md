@@ -1,1 +1,0 @@
-/home/student/Projects/AGENTS.md
